@@ -39,3 +39,22 @@ Translate this scientific IPCC finding into a public-facing policy summary and a
 
 ### Social Media Brief
 [Engaging Copy with Hashtags/Emojis]
+2. Parameter-Efficient QLoRA ArchitectureInstead of modifying all 3 billion parameters—which would cause out-of-memory errors on commodity hardware—this pipeline implements Quantized Low-Rank Adaptation (QLoRA).The original weights are frozen in 4-bit NormalFloat (NF4) precision.Low-rank adapter matrices ($r=8, \alpha=16$) are injected specifically into the model's core attention modules (q_proj, v_proj, k_proj, o_proj).Trainable parameters are restricted to just 0.1193% of the entire network, keeping the footprint highly lightweight.
+3. Mixed-Precision & Library Adaptation
+Built with strict compliance for modern Hugging Face ecosystem updates:
+
+Utilizing SFTConfig for unified asset tracking instead of legacy training argument wrappers.
+
+Passing the tokenizer through the modernized multi-modal processing_class field.
+
+Native execution alignment: fp16 scaling is managed entirely by the bitsandbytes compute dtype configuration rather than PyTorch's native GradScaler, eliminating precision runtime clashes on the NVIDIA T4 chip architecture.
+📦 Repository Structure & Files
+Climate_Science_FineTuning.ipynb: The complete production notebook containing the dataset constructor, quantization configuration, adapter initialization, training loop, and inference validation.
+
+.gitignore: Configured explicitly to mask heavy auto-generated local data structures:
+
+Blocks checkpoint states (checkpoint-*/)
+
+Blocks fine-tuning model weight files (climate_model_results/)
+
+Cleans macOS/Jupyter runtime metadata artifacts (.DS_Store, .ipynb_checkpoints/)
